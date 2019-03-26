@@ -15,6 +15,7 @@ use think\exception\HttpException;
 use think\Request as thinkRequest;
 use think\Config;
 use think\Cache;
+use think\Cookie;
 
 /**
  * Swoole应用对象
@@ -39,11 +40,27 @@ class Application extends App
             $this->beginTime = microtime(true);
             $this->beginMem  = memory_get_usage();
 
+            // 设置Cookie类Response
+            Cookie::setResponse($response);
+
             $_COOKIE = $request->cookie ?: [];
             $_GET    = $request->get ?: [];
             $_POST   = $request->post ?: [];
             $_FILES  = $request->files ?: [];
-            $_SERVER = array_change_key_case($request->server ?: [], CASE_UPPER);
+            $header  = $request->header ?: [];
+            $server  = $request->server ?: [];
+
+            if (isset($header['x-requested-with'])) {
+                $server['HTTP_X_REQUESTED_WITH'] = $header['x-requested-with'];
+            }
+            if (isset($header['referer'])) {
+                $server['http_referer'] = $header['referer'];
+            }
+            // if (isset($_GET[$this->config->get('var_pathinfo')])) {
+            //     $server['path_info'] = $_GET[$this->config->get('var_pathinfo')];
+            // }
+
+            $_SERVER = array_change_key_case($server, CASE_UPPER);
 
             $_SERVER['HTTP_HOST'] = Config::get('app_host') ? Config::get('app_host') : "127.0.0.1";
             $_SERVER['argv'][1] = $_SERVER["PATH_INFO"];
