@@ -13,6 +13,7 @@ use think\App;
 use think\Error;
 use think\exception\HttpException;
 use think\Request as thinkRequest;
+use think\View as thinkView;
 use think\Config;
 use think\Cache;
 use think\Cookie;
@@ -35,6 +36,7 @@ class Application extends App
     {
         try {
             thinkRequest::destroy();
+            thinkView::destroy();
             ob_start();
             // 重置应用的开始时间和内存占用
             $this->beginTime = microtime(true);
