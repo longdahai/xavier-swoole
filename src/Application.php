@@ -53,12 +53,15 @@ class Application extends App
             if (isset($header['x-requested-with'])) {
                 $server['HTTP_X_REQUESTED_WITH'] = $header['x-requested-with'];
             }
+            if (isset($header['user-agent'])) {
+                $server['HTTP_USER_AGENT'] = $header['user-agent'];
+            }
             if (isset($header['referer'])) {
                 $server['http_referer'] = $header['referer'];
             }
-            // if (isset($_GET[$this->config->get('var_pathinfo')])) {
-            //     $server['path_info'] = $_GET[$this->config->get('var_pathinfo')];
-            // }
+            if (isset($_GET[Config::get('var_pathinfo')])) {
+                $server['path_info'] = $_GET[Config::get('var_pathinfo')];
+            }
 
             $_SERVER = array_change_key_case($server, CASE_UPPER);
 
