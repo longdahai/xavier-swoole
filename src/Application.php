@@ -48,6 +48,7 @@ class Application extends App
             $_COOKIE = $request->cookie ?: [];
             $_GET    = $request->get ?: [];
             $_POST   = $request->post ?: [];
+            $_REQUEST   = array_merge($_GET, $_POST);
             $_FILES  = $request->files ?: [];
             $header  = $request->header ?: [];
             $server  = $request->server ?: [];
